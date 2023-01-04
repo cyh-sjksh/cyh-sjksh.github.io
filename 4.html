@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<!-- 引入刚刚下载的 ECharts 文件 -->
+	<script type="text/javascript" src="./js/echarts.js"></script>
+</head>
+<body>
+<div><h1>近几年双十一中国电商平台热度指数排行</h1></div>
+	<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+	<div id="main" style="width: 1000px;height:600px;"></div>
+	<script type="text/javascript">
+ 
+	 // 测试数据
+	 var newArr = [
+			{
+				"cdate": "2016",
+				"cname": "淘宝,京东,天猫,美团,唯品会,亚马逊,苏宁易购,一号店,当当网,蘑菇街",
+				"cut": "18716381,10600969,5104455,3933276,2631408,2401917,2230576,756690,663268,618189"
+			},
+			{
+				"cdate": "2017",
+				"cname": "淘宝,京东,天猫,美团,亚马逊,苏宁易购,拼多多,唯品会,1688,当当网",
+				"cut": "15464457,10178550,3815907,2808395,2041992,1861138,1792733,1622084,643206,577480"
+			},
+			{
+				"cdate": "2018",
+				"cname": "淘宝,京东,天猫,美团,亚马逊,拼多多,苏宁易购,唯品会,1688,当当网",
+				"cut": "12224403,8245345,2446182,1761522,1464913,1390702,1065290,932331,757828,468255"
+			},
+			{
+				"cdate": "2019",
+				"cname": "淘宝,京东,天猫,拼多多,美团,唯品会,亚马逊,苏宁易购,1688,国美",
+				"cut": "9358140,6703334,1813230,1595298,1267624,955141,837494,755006,493484,381864"
+			},
+			{
+				"cdate": "2020",
+				"cname": "京东,淘宝,抖音,拼多多,天猫,美团,1688,唯品会,国美,亚马逊",
+				"cut": "6409260,6005826,2879654,1824101,1308538,1197233,814070,787341,721451,713076"
+			},
+            {
+				"cdate": "2021",
+				"cname": "抖音,淘宝,京东,拼多多,美团,天猫,国美,亚马逊,唯品会,1688",
+				"cut": "5769300,5266787,4037094,2326130,1147261,788294,714531,563978,457362,377437"
+			},
+            {
+				"cdate": "2022",
+				"cname": "抖音,淘宝,京东,拼多多,美团,1688,天猫,亚马逊,唯品会,苏宁易购",
+				"cut": "8769518,5266878,4772948,1692659,1003908,715136,536854,390764,316253,160731"
+			}
+		]
+	
+	 // 柱形颜色
+	 const countryColors = {
+			 淘宝: '#88008b',
+			 天猫: '#f00',
+			 京东: '#ffde00',
+			 拼多多: '#00807b',
+			 苏宁易购: '#0035ff',
+			 唯品会: '#edff39',
+             抖音:'#00008b',
+             美团:'#5fa37f',
+             1688:'#000',
+             国美:'#ed2939',
+             当当网:'#f93',
+             一号店:'#024fa2',		
+			 亚马逊:'#353841'
+			};
+		
+	// 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+	var updateFrequency = 2300;	// 数据更新速度
+	var years = [];
+	var startIndex =0;
+	for (var i = 0; i < newArr.length; ++i) {
+		years.push(newArr[i])
+	}
+	// 获取第一个数据
+	var startYear = years[startIndex].cdate;
+	var startName = years[startIndex].cname.split(',');
+	var startCut = years[startIndex].cut.split(',');
+	
+	var option = {
+			// 图标的上下左右边界
+		    grid: {
+		        top: 18,
+		        bottom: 30,
+		        left: 120,
+		        right: 120
+		    },
+		    // x 轴相关
+		    xAxis: {
+		        max: 'dataMax',
+		        splitLine: {
+		            show: true,  	
+		            lineStyle: {
+		                color: 'rgba(100,100,100, 0.4)',	
+		                type: 'dashed'
+		            }
+		        },
+		        
+		        axisLabel: {
+		        	// 圆整 X 轴 参数
+		            formatter: function (n) {
+		              return Math.round(n) + '';
+		            }
+		          }
+		    },
+		    dataset: {
+		        source: newArr
+		    },
+		    // y 轴数据
+		    yAxis: {
+		        type: 'category',
+		        inverse: true, 	// 大在上面，小在下面排序
+		        max: 9,			// 最多显示个数
+		        data: startName,
+		        axisLabel: {
+		            show: true,
+		            textStyle: {
+		                fontSize: 14
+		            },
+		            rich: {
+		                flag: {
+		                    fontSize: 25,
+		                    padding: 5
+		                }
+		            }
+		        },
+		        animationDuration: 600,
+		        animationDurationUpdate: 600
+		    },
+		    series: [{
+		        realtimeSort: true,
+		        seriesLayoutBy: 'column',
+		        type: 'bar',
+		        itemStyle: {
+		            /* color: 'rgb(13,208,229)' */
+		            color:function (param) {
+		  
+		                return  countryColors[param.name];
+		            }
+		        },
+		        encode: {
+		            x: 3,
+		            y: 3
+		        },
+		        label: {
+		            show: true,
+		            precision: 1,
+		            position: 'right',
+		            valueAnimation: true,
+		            fontFamily: 'monospace',
+		            /* formatter: function (data) {
+		                return startCut[data.dataIndex] + "%";
+		            } */
+		        },
+		        data: startCut
+		    }],
+		    
+		    animationDuration: 300,
+		    animationDurationUpdate: updateFrequency,
+		    animationEasing: 'linear',
+		    animationEasingUpdate: 'linear',
+		    graphic: {
+		    	// 年代的文字 Text
+		        elements: [{
+		            type: 'text',
+		            right: 120,
+		            bottom: 60,
+		            style: {
+		                text: startYear,
+		                font: 'bolder 40px monospace',
+		                fill: 'rgba(100, 100, 100, 0.25)'
+		            },
+		            z: 100
+		        }]
+		    }
+		};
+	
+		// 使用刚指定的配置项和数据显示图表。
+	    myChart.setOption(option);
+	    for (var i = startIndex; i < newArr.length - 1; ++i) {
+		    (function (i) {
+		        setTimeout(function () {
+		            updateYear(years[i + 1]);
+		        }, (i + 1) * updateFrequency);
+		    })(i);
+		}
+ 
+	    // 更新数据
+		function updateYear(year) {
+			option.yAxis.data = year.cname.split(',');
+			option.series[0].data = year.cut.split(',');
+			option.graphic.elements[0].style.text = year.cdate;
+		 	// 使用刚指定的配置项和数据显示图表。
+		     myChart.setOption(option);
+        }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <!-- 引入刚刚下载的 ECharts 文件 -->
+    <script src="./js/echarts.js"></script>
+  </head>
+  <body>
+    <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+    <div id="main" style="width:1500px;height:400px;"></div>
+    <script type="text/javascript"> 
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(document.getElementById('main'));
+
+      // 指定图表的配置项和数据
+     var option = {
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow'
+    }
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  xAxis: [
+    {
+      type: 'category',
+      data: ['生活日化', '服装鞋帽', '食品饮料', '美妆护肤', '家居家装', '数码家电', '书籍教育', '宠物用品', '母婴用品', '保健药品', '汽车出行', '其他'],
+      axisTick: {
+        alignWithLabel: true
+      }
+    }
+  ],
+  yAxis: [
+    {
+      type: 'value'
+    }
+  ],
+  series: [
+    {
+      name: 'Direct',
+      type: 'bar',
+      barWidth: '60%',
+      data: [51.4, 51.1, 46.9, 43.5,32.6, 31.6,24.4, 20.2,19.0,18.8,15.4,0.2]
+    }
+  ]
+};
+
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option);
+    </script>
+  </body>
+</html>
